@@ -41,7 +41,7 @@ namespace SpotifyPlaylistManager
                 await AddSongToPlaylist(joyFmPlaylist, await JoyFm.GetCurrentSongAsync());
 
                 if (DateTime.Now.Hour >= 20)
-                    return;
+                    return; 
 
                 await Task.Delay(240000); // wait 4 minutes for the new song
             }
