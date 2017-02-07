@@ -14,6 +14,8 @@ namespace SpotifyPlaylistManager
 
         static async Task MainAsync()
         {
+            FileHelper.AddTextToFile("SpotifyPlaylistManager", "SpotifyPlaylistManager started!");
+
             var eksenPlaylist = await GetPlaylist($"Eksen {DateTime.Now.ToString("MMMM yyyy")}");
             var redPlaylist = await GetPlaylist($"Red {DateTime.Now.ToString("MMMM yyyy")}");
             var veronicaPlaylist = await GetPlaylist($"Veronica {DateTime.Now.ToString("MMMM yyyy")}");
@@ -37,6 +39,9 @@ namespace SpotifyPlaylistManager
                 await AddSongToPlaylist(joyTurkRockPlaylist, await JoyTurkRock.GetCurrentSongAsync());
 
                 await AddSongToPlaylist(joyFmPlaylist, await JoyFm.GetCurrentSongAsync());
+
+                if (DateTime.Now.Hour >= 20)
+                    return;
 
                 await Task.Delay(240000); // wait 4 minutes for the new song
             }
