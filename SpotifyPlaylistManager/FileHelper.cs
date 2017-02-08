@@ -25,5 +25,19 @@ namespace SpotifyPlaylistManager
 
             File.AppendAllText(path, $"{DateTime.Now.ToString("o")} | {text}\n");
         }
+
+        public static void LogError(string text)
+        {
+            var path = Path.Combine(_directory, "SpotifyPlaylistManagerCritical.log");
+
+            File.AppendAllText(path, $"\n{DateTime.Now.ToString("o")}\n {text}\n---------------------------------------------------------------------------------------------");
+        }
+
+        public static void LogTrace(string text)
+        {
+            var path = Path.Combine(_directory, "SpotifyPlaylistManagerTrace.log");
+
+            File.AppendAllText(path, $"{DateTime.Now.ToString("o")} | {text}\n");
+        }
     }
 }

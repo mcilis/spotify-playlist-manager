@@ -33,13 +33,15 @@ namespace SpotifyPlaylistManager.Sources
                         var splittedTitle = songTitle.Split('-');
                         if (splittedTitle.Length == 2)
                         {
-                            return new Song { Artist = splittedTitle[0].Trim(), TrackName = splittedTitle[1].Trim() };
+                            var song = new Song { Artist = splittedTitle[0].Trim(), TrackName = splittedTitle[1].Trim() };
+                            FileHelper.LogTrace($"RedFm.GetCurrentSongAsync(): {song.Artist} - {song.TrackName}");
+                            return song;
                         }
                         return null;
                     }
                     catch (Exception exception)
                     {
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", $"RedFm.GetCurrentSongAsync - Error: {exception.Message} Content: {responseContent}");
+                        FileHelper.LogError($"RedFm.GetCurrentSongAsync \n Error: {exception.Message} \n Content: {responseContent}");
                     }
                 }
             }

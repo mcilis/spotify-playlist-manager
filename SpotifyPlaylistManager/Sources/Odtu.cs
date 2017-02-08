@@ -31,15 +31,17 @@ namespace SpotifyPlaylistManager.Sources
                         var parser = new HtmlParser();
                         var document = parser.Parse(responseContent);
 
-                        return new Song
+                        var song = new Song
                         {
                             Artist = document.QuerySelector("#rep_now_playing_artist").TextContent.Trim(),
                             TrackName = document.QuerySelector("#rep_now_playing_song").TextContent.Trim()
                         };
+                        FileHelper.LogTrace($"Odtu.GetCurrentSongAsync(): {song.Artist} - {song.TrackName}");
+                        return song;
                     }
                     catch (Exception exception)
                     {
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", $"Odtu.GetCurrentSongAsync - Error: {exception.Message} Content: {responseContent}");
+                        FileHelper.LogError($"Odtu.GetCurrentSongAsync \n Error: {exception.Message} \n Content: {responseContent}");
                     }
                 }
             }

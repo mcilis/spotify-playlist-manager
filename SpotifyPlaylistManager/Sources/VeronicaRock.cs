@@ -29,15 +29,17 @@ namespace SpotifyPlaylistManager.Sources
                     try
                     {
                         var currentSongResult = JObject.Parse(responseContent);
-                        return new Song
+                        var song = new Song
                         {
                             Artist = currentSongResult["current"]["artist"].ToString().Trim(),
                             TrackName = currentSongResult["current"]["title"].ToString().Trim()
                         };
+                        FileHelper.LogTrace($"VeronicaRock.GetCurrentSongAsync(): {song.Artist} - {song.TrackName}");
+                        return song;
                     }
                     catch (Exception exception)
                     {
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", $"VeronicaRock.GetCurrentSongAsync - Error: {exception.Message} Content: {responseContent}");
+                        FileHelper.LogError($"VeronicaRock.GetCurrentSongAsync \n Error: {exception.Message} \n Content: {responseContent}");
                     }
                 }
             }

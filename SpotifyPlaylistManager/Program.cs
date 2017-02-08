@@ -14,7 +14,7 @@ namespace SpotifyPlaylistManager
 
         static async Task MainAsync()
         {
-            FileHelper.AddTextToFile("SpotifyPlaylistManager", "SpotifyPlaylistManager started!");
+            FileHelper.LogTrace("Program.MainAsync() - SpotifyPlaylistManager started!");
 
             var eksenPlaylist = await GetPlaylist($"Eksen {DateTime.Now.ToString("MMMM yyyy")}");
             var redPlaylist = await GetPlaylist($"Red {DateTime.Now.ToString("MMMM yyyy")}");
@@ -49,6 +49,8 @@ namespace SpotifyPlaylistManager
 
         static async Task<Playlist> GetPlaylist(string playlistName)
         {
+            FileHelper.LogTrace($"Program.GetPlaylist({playlistName})");
+
             var playlist = await Spotify.FindPlaylistAsync(playlistName);
             if (playlist == null)
             {
@@ -56,7 +58,7 @@ namespace SpotifyPlaylistManager
                 playlist = await Spotify.CreatePlaylistAsync(playlistName);
                 if (playlist == null)
                 {
-                    FileHelper.AddTextToFile("SpotifyPlaylistManager", "GetPlaylist - Playlist could not be created!");
+                    FileHelper.LogError("GetPlaylist - Playlist could not be created!");
                 }
             }
             return playlist;
@@ -75,6 +77,7 @@ namespace SpotifyPlaylistManager
                 if (track == null)
                 {
                     FileHelper.AddTextToFile(playlist.Name, $"{song.Artist} - {song.TrackName} : [SpotifyFileNotFound!]");
+                    FileHelper.LogTrace($"Program.AddSongToPlaylist({playlist.Name}, {song.Artist} - {song.TrackName}) - Spotify file not found!");
                 }
                 else
                 {
@@ -85,8 +88,13 @@ namespace SpotifyPlaylistManager
                     else
                     {
                         FileHelper.AddTextToFile(playlist.Name, $"{song.Artist} - {song.TrackName} : [SpotifyTrackAddFailed!]");
+                        FileHelper.LogTrace($"Program.AddSongToPlaylist({playlist.Name}, {song.Artist} - {song.TrackName}) - Spotify track add failed!");
                     }
                 }
+            }
+            else
+            {
+                FileHelper.LogTrace($"Program.AddSongToPlaylist({playlist.Name}, {song.Artist} - {song.TrackName}) - Playlist contains song!");
             }
 
         }

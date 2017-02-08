@@ -59,7 +59,7 @@ namespace SpotifyPlaylistManager
                     }
                     catch (Exception exception)
                     {
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", $"Spotify.SearchForATrackAsync - Error: {exception.Message} Query: {query}");
+                        FileHelper.LogError($"Spotify.SearchForATrackAsync \n Error: {exception.Message} \n {exception.InnerException?.Message} \n Query: {query}");
                     }
                 }
             }
@@ -193,7 +193,7 @@ namespace SpotifyPlaylistManager
                 else
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();  // {"snapshot_id" : "d+E/vkyoy+hRobCgiCNbsGDeFNGnz1PKzVGOX7kbO12LXllCMb917TOPC36tKbum"}
-                    FileHelper.AddTextToFile("SpotifyPlaylistManager", $"AddTrackToPlaylistAsync - add track failed, responseContent:{responseContent}");
+                    FileHelper.LogError($"AddTrackToPlaylistAsync - add track failed, responseContent:{responseContent}");
                     return false;
                 }
             }
@@ -218,12 +218,11 @@ namespace SpotifyPlaylistManager
                         _clientCredentials = await CreateClientCredentialsAsync();
                         if (_clientCredentials == null)
                         {
-                            FileHelper.AddTextToFile("SpotifyPlaylistManager", "GetAccessTokenAsync InitialConfiguration - Retrieving client credentials is failed!");
+                            FileHelper.LogError("GetAccessTokenAsync InitialConfiguration - Retrieving client credentials is failed!");
                             throw new Exception("GetAccessTokenAsync - Retrieving client credentials is failed!");
                         }
 
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", "GetAccessTokenAsync - Write the following refresh token value to the AppSettings!");
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", $"RefreshToken=\n\n{_clientCredentials.RefreshToken}\n");
+                        FileHelper.LogError($"GetAccessTokenAsync \n Write the following refresh token value to the AppSettings: \n RefreshToken=\n\n{_clientCredentials.RefreshToken} \n");
                         // Bu degeri App.config.AppSettings.RefreshToken alanina yaz.
                         break;
                     }
@@ -232,13 +231,13 @@ namespace SpotifyPlaylistManager
                         _clientCredentials = await RefreshClientCredentialsAsync();
                         if (_clientCredentials == null)
                         {
-                            FileHelper.AddTextToFile("SpotifyPlaylistManager", "GetAccessTokenAsync RefreshToken - Retrieving client credentials is failed!");
+                            FileHelper.LogError("GetAccessTokenAsync RefreshToken - Retrieving client credentials is failed!");
                             throw new Exception("GetAccessTokenAsync RefreshToken - Retrieving client credentials is failed!");
                         }
                         break;
                     }
                 default:
-                    FileHelper.AddTextToFile("SpotifyPlaylistManager", "GetAccessTokenAsync - Invalid mode!");
+                    FileHelper.LogError("GetAccessTokenAsync - Invalid mode!");
                     throw new Exception("GetAccessTokenAsync - Invalid mode!");
             }
 

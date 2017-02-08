@@ -28,11 +28,13 @@ namespace SpotifyPlaylistManager.Sources
                 {
                     try
                     {
-                        return JsonConvert.DeserializeObject<Song>(responseContent);
+                        var song = JsonConvert.DeserializeObject<Song>(responseContent);
+                        FileHelper.LogTrace($"Eksen.GetCurrentSongAsync(): {song.Artist} - {song.TrackName}");
+                        return song;
                     }
                     catch (Exception exception)
                     {
-                        FileHelper.AddTextToFile("SpotifyPlaylistManager", $"Eksen.GetCurrentSongAsync - Error: {exception.Message} Content: {responseContent}");
+                        FileHelper.LogError($"Eksen.GetCurrentSongAsync \n Error: {exception.Message} \n Content: {responseContent}");
                     }
                 }
             }
