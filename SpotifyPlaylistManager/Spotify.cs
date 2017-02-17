@@ -199,6 +199,65 @@ namespace SpotifyPlaylistManager
             }
         }
 
+        public static async Task GetPlaylistTracksAsync(Playlist playlist, string ownerId = "mcilis")
+        {
+            // GET https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {await GetAccessTokenAsync()}");
+
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri($"https://api.spotify.com/v1/users/{ownerId}/playlists/{playlist.Id}/tracks?fields=items(added_at,track(track_number,uri))"),
+                    Method = HttpMethod.Get
+                };
+
+                var response = await client.SendAsync(request);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var spotifyPlaylist = JObject.Parse(responseContent);
+                    IList<JToken> results = spotifyPlaylist["items"].Children().ToList();
+                    foreach (JToken result in results)
+                    {
+                        var addedAt = Convert.ToDateTime(result["added_at"]);
+                        var trackNumber = Convert.ToInt16(result["track"]["track_number"]);
+                        var trackUri = result["track"]["uri"].ToString();
+
+                    }
+                }
+            }
+        }
+
+        public static async Task<bool> RemovePlaylistTracksAsync(Playlist playlist, string ownerId = "mcilis")
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {await GetAccessTokenAsync()}");
+
+                var request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri($"https://api.spotify.com/v1/users/{ownerId}/playlists/{playlist.Id}/tracks"),
+                    Method = HttpMethod.Put
+                };
+
+                var body = JsonConvert.SerializeObject(new { uris = new[] { "spotify:track:6Z5XZ8fjmWGbkdahOgreVe" } }, Formatting.Indented); // You have to add at least one track!
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+
+                var response = await client.SendAsync(request);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
         #region PRIVATE METHODS
 

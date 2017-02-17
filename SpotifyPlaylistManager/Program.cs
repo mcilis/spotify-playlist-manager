@@ -16,6 +16,9 @@ namespace SpotifyPlaylistManager
         {
             FileHelper.LogTrace("Program.MainAsync() - SpotifyPlaylistManager started!");
 
+            var eksenLivePlaylist = await GetPlaylist("Eksen Live");
+            await Spotify.RemovePlaylistTracksAsync(eksenLivePlaylist);
+
             var eksenPlaylist = await GetPlaylist($"Eksen {DateTime.Now.ToString("MMMM yyyy")}");
             var redPlaylist = await GetPlaylist($"Red {DateTime.Now.ToString("MMMM yyyy")}");
             var veronicaPlaylist = await GetPlaylist($"Veronica {DateTime.Now.ToString("MMMM yyyy")}");
@@ -26,7 +29,11 @@ namespace SpotifyPlaylistManager
 
             while (true)
             {
-                await AddSongToPlaylist(eksenPlaylist, await Eksen.GetCurrentSongAsync());
+                var eksenSong = await Eksen.GetCurrentSongAsync();
+
+                await AddSongToLivePlaylist(eksenLivePlaylist, eksenSong);
+
+                await AddSongToPlaylist(eksenPlaylist, eksenSong);
 
                 await AddSongToPlaylist(redPlaylist, await RedFm.GetCurrentSongAsync());
 
@@ -98,5 +105,17 @@ namespace SpotifyPlaylistManager
             }
 
         }
+
+        static async Task AddSongToLivePlaylist(Playlist playlist, Song song)
+        {
+            if (playlist == null || song == null)
+                return;
+
+            var track = await Spotify.SearchForATrackAsync(song.TrackName, song.Artist);
+
+            if (track != null)
+                await Spotify.AddTrackToPlaylistAsync(playlist, track);
+        }
+
     }
 }

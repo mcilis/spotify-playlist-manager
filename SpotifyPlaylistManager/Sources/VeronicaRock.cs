@@ -29,6 +29,13 @@ namespace SpotifyPlaylistManager.Sources
                     try
                     {
                         var currentSongResult = JObject.Parse(responseContent);
+
+                        var type = currentSongResult["current"]["type"].ToString();
+                        if (type != "track")
+                        {
+                            return null;
+                        }
+
                         var song = new Song
                         {
                             Artist = currentSongResult["current"]["artist"].ToString().Trim(),
