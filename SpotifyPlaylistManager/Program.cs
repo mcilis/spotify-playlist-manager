@@ -27,11 +27,16 @@ namespace SpotifyPlaylistManager
             var joyTurkRockPlaylist = await GetPlaylist($"Joy Turk Rock {DateTime.Now.ToString("MMMM yyyy")}");
             var joyFmPlaylist = await GetPlaylist($"Joy {DateTime.Now.ToString("MMMM yyyy")}");
 
+            Song previousEksenSong = null;
             while (true)
             {
                 var eksenSong = await Eksen.GetCurrentSongAsync();
 
-                await AddSongToLivePlaylist(eksenLivePlaylist, eksenSong);
+                if (previousEksenSong == null || previousEksenSong.TrackName != eksenSong.TrackName)
+                {
+                    await AddSongToLivePlaylist(eksenLivePlaylist, eksenSong);
+                    previousEksenSong = eksenSong;
+                }
 
                 await AddSongToPlaylist(eksenPlaylist, eksenSong);
 
