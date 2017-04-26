@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Configuration;
 
 namespace SpotifyPlaylistManager
 {
     public class FileHelper
     {
         const string _directory =  @"c:\log\spotifyplaylistmanager\";
+        static string _logLevel = ConfigurationManager.AppSettings["LogLevel"]; // Error / Trace
+
         public static bool FileContainsText(string filename, string text)
         {
             var path = Path.Combine(_directory, $"{filename.Replace(" ", ".")}.log");
@@ -35,6 +38,9 @@ namespace SpotifyPlaylistManager
 
         public static void LogTrace(string text)
         {
+            if (_logLevel != "Trace")
+                return;
+
             var path = Path.Combine(_directory, "SpotifyPlaylistManagerTrace.log");
 
             File.AppendAllText(path, $"{DateTime.Now.ToString("o")} | {text}\n");
