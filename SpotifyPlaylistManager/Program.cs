@@ -23,7 +23,6 @@ namespace SpotifyPlaylistManager
             var redPlaylist = await GetPlaylist($"Red {DateTime.Now.ToString("MMMM yyyy")}");
             var veronicaPlaylist = await GetPlaylist($"Veronica {DateTime.Now.ToString("MMMM yyyy")}");
             var veronicaRockPlaylist = await GetPlaylist($"Veronica Rock {DateTime.Now.ToString("MMMM yyyy")}");
-            var odtuPlaylist = await GetPlaylist($"Radyo ODTU {DateTime.Now.ToString("MMMM yyyy")}");
             var joyTurkRockPlaylist = await GetPlaylist($"Joy Turk Rock {DateTime.Now.ToString("MMMM yyyy")}");
             var joyFmPlaylist = await GetPlaylist($"Joy {DateTime.Now.ToString("MMMM yyyy")}");
 
@@ -45,8 +44,6 @@ namespace SpotifyPlaylistManager
                 await AddSongToPlaylist(veronicaPlaylist, await Veronica.GetCurrentSongAsync());
 
                 await AddSongToPlaylist(veronicaRockPlaylist, await VeronicaRock.GetCurrentSongAsync());
-
-                await AddSongToPlaylist(odtuPlaylist, await Odtu.GetCurrentSongAsync());
 
                 await AddSongToPlaylist(joyTurkRockPlaylist, await JoyTurkRock.GetCurrentSongAsync());
 

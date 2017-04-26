@@ -64,7 +64,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sources\JoyFm.cs" />
     <Compile Include="Sources\JoyTurkRock.cs" />
-    <Compile Include="Sources\Odtu.cs" />
     <Compile Include="Sources\RedFm.cs" />
     <Compile Include="Spotify.cs" />
     <Compile Include="Sources\Veronica.cs" />
