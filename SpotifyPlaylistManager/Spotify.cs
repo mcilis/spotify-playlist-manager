@@ -33,6 +33,8 @@ namespace SpotifyPlaylistManager
             var query = $"{trackName.Trim().Replace(" ", "+")}+{artistName.Trim().Replace(" ", "+")}";
             using (var client = new HttpClient())
             {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {await GetAccessTokenAsync()}");
+
                 var request = new HttpRequestMessage()
                 {
                     RequestUri = new Uri($"https://api.spotify.com/v1/search?q={query}&type=track&market=TR"),
@@ -41,7 +43,7 @@ namespace SpotifyPlaylistManager
 
                 var response = await client.SendAsync(request);
                 var responseContent = await response.Content.ReadAsStringAsync();
-
+                                
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     try
@@ -61,6 +63,10 @@ namespace SpotifyPlaylistManager
                     {
                         FileHelper.LogError($"Spotify.SearchForATrackAsync \n Error: {exception.Message} \n {exception.InnerException?.Message} \n Query: {query}");
                     }
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    FileHelper.LogError($"Spotify.SearchForATrackAsync \n Error: Unauthorized! Check for refresh token... \n Query: {query}");
                 }
             }
             return null;
