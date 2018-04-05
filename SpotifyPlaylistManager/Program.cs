@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SpotifyPlaylistManager.Models;
 using SpotifyPlaylistManager.Sources;
+using System.Net;
 
 namespace SpotifyPlaylistManager
 {
@@ -9,6 +10,7 @@ namespace SpotifyPlaylistManager
     {
         static void Main(string[] args)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             MainAsync().GetAwaiter().GetResult();
         }
 

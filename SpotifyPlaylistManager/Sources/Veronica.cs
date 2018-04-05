@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
-using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using SpotifyPlaylistManager.Models;
 
 namespace SpotifyPlaylistManager.Sources

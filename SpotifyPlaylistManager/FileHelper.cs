@@ -7,9 +7,9 @@ namespace SpotifyPlaylistManager
 {
     public class FileHelper
     {
-        const string _directory =  @"c:\log\spotifyplaylistmanager\";
+        static string _directory = ConfigurationManager.AppSettings["LogPath"]; // c:\log\spotifyplaylistmanager\
         static string _logLevel = ConfigurationManager.AppSettings["LogLevel"]; // Error / Trace
-
+                
         public static bool FileContainsText(string filename, string text)
         {
             var path = Path.Combine(_directory, $"{filename.Replace(" ", ".")}.log");
