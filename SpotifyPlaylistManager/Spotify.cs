@@ -23,6 +23,16 @@ namespace SpotifyPlaylistManager
             _key = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
         }
 
+        public static async Task<string> InitialConfiguration()
+        {
+            // Use: GetSpotifyAccessTokenCode.html
+
+            var token = await GetAccessTokenAsync();
+
+            return token;
+        }
+
+
         public static async Task<Track> SearchForATrackAsync(string trackName, string artistName)
         {
             // curl -X GET "https://api.spotify.com/v1/search?q=Belfast+Child++Simple+Minds&type=track&market=TR&limit=1" -H "Accept: application/json"
@@ -277,8 +287,8 @@ namespace SpotifyPlaylistManager
             {
                 case "InitialConfiguration":
                     {
-                        // Code guncellemek icin: http://jsfiddle.net/JMPerez/62wafrm7/
-                        // CLIENT_ID degistir. Run'a bas. Sonra Login butonuna tikla. Acilan sayfadaki code parametresini kopyala.
+                        // Use: GetSpotifyAccessTokenCode.html
+                        // Old reference: http://jsfiddle.net/JMPerez/62wafrm7/
 
                         _clientCredentials = await CreateClientCredentialsAsync();
                         if (_clientCredentials == null)

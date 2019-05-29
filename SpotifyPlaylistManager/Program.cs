@@ -17,6 +17,8 @@ namespace SpotifyPlaylistManager
 
         static async Task MainAsync()
         {
+            //var token = await Spotify.InitialConfiguration();
+            
             FileHelper.LogTrace("Program.MainAsync() - SpotifyPlaylistManager started!");
 
             var eksenLivePlaylist = await GetPlaylist("Eksen Live");
@@ -57,6 +59,7 @@ namespace SpotifyPlaylistManager
 
                 await Task.Delay(240000); // wait 4 minutes for the new song
             }
+            
         }
 
         static async Task<Playlist> GetPlaylist(string playlistName)
